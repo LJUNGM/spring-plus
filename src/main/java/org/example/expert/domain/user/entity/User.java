@@ -21,6 +21,8 @@ public class User extends Timestamped {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    private String nickname;
+
     public User(String email, String password, UserRole userRole) {
         this.email = email;
         this.password = password;
@@ -34,7 +36,8 @@ public class User extends Timestamped {
     }
 
     public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole());
+        UserRole authUserRole = UserRole.of(authUser.getAuthorities().iterator().next().getAuthority());
+        return new User(authUser.getId(), authUser.getEmail(), authUserRole);
     }
 
     public void changePassword(String password) {
